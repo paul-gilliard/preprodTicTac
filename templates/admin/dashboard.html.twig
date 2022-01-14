@@ -1,0 +1,18 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block header %} <link rel="stylesheet" href="{{ asset('css/global.css') }}"> {% endblock %}
+
+
+{% block content_title %}Backoffice {% endblock %}
+
+{% block Content %}
+    {% block main %}
+
+
+<a href="#" class="bouton_reset_users" >  Acces phpMyAdmin </a>
+
+ <a href="{{ path('resetDatabaseUsers')}}" class="bouton_reset_users" onclick="return confirm('Are you sure?')" >  Reset users Databases </a>
+
+
+    {% endblock %}
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{%  block body %}
+ <link rel="stylesheet" href="{{ asset('css/global.css') }}">
+
+<div class="background_login">
+  <div class="middle_container_login">
+    <div class="barConnexion">
+        <a class="nav-link" href="{{ path('inscription')}}" id="inscriptionMenu"> <button class="btn btn-lg btn-lg" type="button" >Inscription</button></a>
+        <a class="nav-link" href="{{ path('login')}}" id="ConnexionMenu" ><button class="btn btn-lg btn-lg" type="button" >Connexion</button></a>
+    </div>
+    <div class="formRegister">
+        {{form_start(form)}}
+            <div class="form-floating mb-3" id="InputUsername">
+                {{ form_row(form.Username)}}
+                <label for="floatingInput"></label>
+            </div>
+            <div class="form-floating" id="InputEmail">
+                {{ form_row(form.email)}}
+                <label for="floatingPassword"></label>
+            </div>
+            <div class="form-floating" id="InputPassword">
+                {{ form_row(form.password)}}
+                <label for="floatingPassword"></label>
+            </div>
+      </div>
+      <button type="submit" class="btn btn-primary btn-lg" id="inscriptionbutton" > Inscription </button>
+      {{form_end(form)}}
+  </div>
+
+  
+
+
+{% endblock %}

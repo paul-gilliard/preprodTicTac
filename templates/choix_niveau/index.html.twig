@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ChoixNiveauController!{% endblock %}
+
+{% block body %}
+ <link rel="stylesheet" href="{{ asset('css/global.css') }}">
+
+<container class="middle_container_choose">
+    <form action="" methode="post">
+        {# <div class="levelOne">
+            <input type="radio" name="level"  id="cup">
+            <label for="cup">
+                <img src="{{ asset('images/cupActu7.5.jpeg') }}" alt="cup" style="max-width: 100%;" />
+            </label>
+        </div>
+        <div class="levelTwo">
+            <input type="radio" name="level"  id="buste">
+            <label for="buste">
+                <img src="{{ asset('images/buste7.5.jpeg') }}"style="max-width: 100%;" />
+            </label>
+        </div>
+            <div class="levelThree">
+                <input type="radio" name="level"  id="office">
+            <label for="office">
+                <img src="{{ asset('images/office7.5.jpeg') }}" style="max-width: 100%;"/>
+            </label>
+        </div> #}
+
+        
+
+<div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+<div class="levelOne">
+  <input type="radio" class="btn-check" name="btnradio1" id="btnradio1" value="levelOne">
+  <label class="btn btn-outline-primary" for="btnradio1"><img src="{{ asset('images/cupActu7.5.jpeg') }}" alt="cup" style="max-width: 100%;" /></label>
+  </div>
+  <div class="levelTwo">
+  <input type="radio" class="btn-check" name="btnradio1" id="btnradio2" value="levelTwo">
+  <label class="btn btn-outline-primary" for="btnradio2"> <img src="{{ asset('images/buste7.5.jpeg') }}"style="max-width: 100%;" /></label>
+  </div>
+<div class="levelThree">
+  <input type="radio" class="btn-check" name="btnradio1" id="btnradio3" value="levelThree">
+  <label class="btn btn-outline-primary" for="btnradio3"><img src="{{ asset('images/office7.5.jpeg') }}" style="max-width: 100%;"/></label>
+  </div>
+</div>
+
+
+</container>
+
+<button type="submit" class="btn btn-primary btn-lg" id="choosebutton" > Choisir </button>
+</form>
+
+
+{% endblock %}

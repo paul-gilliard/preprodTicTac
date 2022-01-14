@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HomeController!{% endblock %}
+
+
+{% block body %}
+
+ <link rel="stylesheet" href="{{ asset('css/global.css') }}">
+ 
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+<div class="middle_container">
+    <div class="levelActuel">
+    {% if is_granted('ROLE_ADMIN') %} <img src="{{ asset('images/admin.png') }}" class="imgLevelActuel"/> 
+    {% else %}
+        {% if niveau == "levelOne" %}
+        <a href="{{ path('choix_niveau') }}"> <img src="{{ asset('images/cupActu7.5.jpeg') }}" class="imgLevelActuel"/> </a>
+        {% elseif niveau == "levelTwo" %}
+        <a href="{{ path('choix_niveau') }}"> <img src="{{ asset('images/buste7.5.jpeg') }}" class="imgLevelActuel"/> </a>
+        {% else %}
+        <a href="{{ path('choix_niveau') }}"> <img src="{{ asset('images/office7.5.jpeg') }}" class="imgLevelActuel"/> </a>
+        {% endif %}
+    {% endif %}
+    </div>
+    {% if is_granted('ROLE_ADMIN') %}
+    <a href="{{ path('admin')}}"> <button type="button" class="btn btn-primary btn-lg" id="startbutton" >Admin Access</button> </a>
+    {% else %}
+    <a href="{{ path('exercice')}}"> <button type="button" class="btn btn-primary btn-lg" id="startbutton" >START</button> </a>
+    {% endif %}
+</div>
+
+
+{% endblock %}

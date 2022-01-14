@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}login{% endblock %}
+
+{% block body %}
+ <link rel="stylesheet" href="{{ asset('css/global.css') }}">
+
+<div class="background_login">
+  <div class="middle_container_login">
+    <div class="barConnexion">
+        <a class="nav-link" href="{{ path('inscription')}}" id="inscriptionMenu"> <button class="btn btn-lg btn-lg" type="button" >Inscription</button></a>
+        <a class="nav-link" href="{{ path('login')}}" id="ConnexionMenu" ><button class="btn btn-lg btn-lg" type="button" >Connexion</button></a>
+    </div>
+      <form action="{{path('login')}}" method="post" class="formLogin">
+      <div class="form-group" >
+        <label class="form-label mt-4">Username</label>
+          <div class="form-floating mb-3" id="InputUsername">
+            <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" data-np-checked="1" required name="_username">
+            <label for="floatingInput"></label>
+          </div>
+          <label class="form-label mt-4">Password</label>
+          <div class="form-floating" id="InputPassword">
+            <input type="password" class="form-control" id="floatingPassword" placeholder="Password" data-np-checked="1" required name="_password">
+            <label for="floatingPassword"></label>
+          </div>
+      </div>
+      <button type="submit" class="btn btn-primary btn-lg" id="connexionbutton" > Connexion </button>
+      </form>
+  </div>
+</div>
+{% endblock %}

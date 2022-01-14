@@ -1,0 +1,219 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ExerciceController!{% endblock %}
+
+{% block body %}
+ <link rel="stylesheet" href="{{ asset('css/global.css') }}">
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+    <div class="levelActuelExercice">
+        <h3>{{niveau}}</h3>
+        {% if niveau == "levelOne" %}
+        <img src="{{ asset('images/cupActu.jpeg') }}" class="imgLevelActuelExercice"/>
+        {% elseif niveau == "levelTwo" %}
+        <img src="{{ asset('images/buste.jpeg') }}" class="imgLevelActuelExercice"/>
+        {% else %}
+        <img src="{{ asset('images/office.jpeg') }}" class="imgLevelActuelExercice"/>
+        {% endif %}
+    </div>
+
+    <div class="emplacement_difficulte">
+        <h1>Difficulté {{difficulte}} </h1>
+        <div id="nbWrondResponse"  style="display:none">  {{ numberWrongResponse }} </div>
+        
+
+    </div>
+
+<div class="emplacement_input_exercice">
+    <h3>Question {{numberCurrentQuestion  }}  {% if isCurrentQuestionValidate == true %}
+    ✅ {% else %} ❌ {% endif %} </h3>
+    {# <form> #}
+    {{form_start(form)}}
+        <fieldset>
+            <div class="form-group">
+            {# {{ form_row(form.inputQuestion)}} #}
+            {{ form_widget(form.inputQuestion, {'attr': {'class': 'form-control','id':'exampleTextarea','rows': '7','style':'display:none'}} ) }}
+            <div id="board" class="original" contenteditable="true" spellcheck="false"></div>
+            <div id="dummy" class="original"></div>
+
+            {# <textarea class="form-control" id="exampleTextarea" rows="5"></textarea> #}
+            </div>
+            <button type="submit" class="btn btn-primary" onclick="setCookie('numberWrongResponse',{{numberWrongResponse}},1)" style="margin-top:25%" >Envoyer</button>
+            <input id="helpButton" type="button" class="btn btn-primary"  onclick="showhelp()" style="display:none;margin-top:25%" value="Réponse">
+            {# <button id="helpButton" class="btn btn-primary" onclick="showhelp()" style="display:none" > Réponse </button> #}
+        </fieldset>
+    {{form_end(form)}}
+    {# </form> #}
+    <div class="emplacement_enonce">
+    <h3>{{currentQuestion.getIntituleQuestion}}</h3>
+    </div>
+</div>
+
+    <div class="emplacement_barre_progression">
+        <h3>Avancement : {{ (countValidatedQuestion / countQuestion)*100 }} %</h3>
+        <div class="progress">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: {{ (countValidatedQuestion / countQuestion)*100 }}%;"></div>
+        </div>
+    </div>
+
+    <div class="emplacement_next_previous">
+        <h1><a href="{{ path('précédent')}}" class="{{ disablePrecedent }}"> Précédent  < </a>  {{numberCurrentQuestion  }} / {{countQuestion}}   <a href="{{ path('exerciceChange',{change:'suivant'})}}" class="{{ disableSuivant }}" > >  Suivant </a> <h1>
+    </div>
+
+    {% if popUp != null  %}
+        <script>
+            $(document).ready(function(){
+                $("#exampleModal").modal('show');
+            });
+
+        </script>
+    {% endif %}
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+         <h5 class="modal-title" id="exampleModalLabel">Correcteur</h5>
+        {#<button type="button" class="btn-close ms-2 mb-1" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button> #}
+      </div>
+      <div class="modal-body">
+       {% if popUp == "goodAswer" %}
+        goodAswer
+        {% elseif popUp == "wrongAnswer" %}
+        wrongAnswer
+        {% elseif popUp == "goodAswerButAlreadyValidate" %}
+       goodAswerButAlreadyValidate
+       {% else %}
+       {{ popUp }}
+        {% endif %}
+      </div>
+        {% if popUp == "goodAswer" %}
+        <div class="modal-footer">
+        <input type="submit" class="btn btn-secondary" data-dismiss="modal" onclick="GoodAnswernumberWrongResponseToZero()" value="Fermer">
+      </div>
+        {% elseif popUp == "wrongAnswer" %}
+        <div class="modal-footer">
+        <input type="submit" class="btn btn-secondary" data-dismiss="modal"  onclick="oneMoreWrongResponse()"  value="Fermer">
+      </div>
+        {% elseif popUp == "goodAswerButAlreadyValidate" %}
+       <div class="modal-footer">
+        <input type="submit" class="btn btn-secondary" id="yolo" data-dismiss="modal" onclick="numberWrongResponseToZero"   value="Fermer">
+      </div>
+        {% endif %}
+      
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+         <h5 class="modal-title" id="exampleModalLabel">Réponse </h5>
+        {#<button type="button" class="btn-close ms-2 mb-1" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button> #}
+      </div>
+      <div class="modal-body">
+      blablabla
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+
+
+function setCookie(cname, cvalue, exdays) {
+  const d = new Date();
+  d.setTime(d.getTime() + (exdays*24*60*60*1000));
+  let expires = "expires="+ d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(';');
+  for(let i = 0; i <ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+    
+function numberWrongResponseToZero() {
+  setCookie("numberWrongResponse",0,1);
+  document.getElementById("nbWrondResponse").innerHTML = 0;
+}
+function GoodAnswernumberWrongResponseToZero() {
+    console.log("GoodAnswernumberWrongResponseToZero");
+  setCookie("numberWrongResponse",0,1);
+  window.location.href='/suivant';
+  document.getElementById("nbWrondResponse").innerHTML = 0;
+}
+function oneMoreWrongResponse() {
+    console.log("wrongAnswer");
+   var numberWrongResponse = getCookie("numberWrongResponse");
+   numberWrongResponse = parseInt(numberWrongResponse);
+   numberWrongResponse = numberWrongResponse+1;
+   setCookie("numberWrongResponse",numberWrongResponse,1);
+  document.getElementById("nbWrondResponse").innerHTML = numberWrongResponse;
+  console.log("callHelp");
+  helpButton(numberWrongResponse);
+}
+
+function helpButton(numberWrongResponse){
+    if (numberWrongResponse >= 3){
+        document.getElementById("helpButton").style.display = 'block';
+        document.getElementById("helpButton").style.float = 'right';
+    }
+}
+
+function showhelp(){
+
+    $("#helpModal").modal('show');
+}
+
+
+var highLightedWord = ["select","insert","update","from","where"];
+var regexFromMyArray = new RegExp(highLightedWord.join("|"), 'ig');
+$('#board').keyup(function(event){
+ document.getElementById('dummy').innerHTML = $('#board').html().replace(regexFromMyArray,function(str){
+ return '<span class="highlighted">'+str+'</span>'
+ })
+ console.log(document.getElementById('board').firstChild.data);
+document.getElementById("input_question_inputQuestion").value = document.getElementById('board').firstChild.data;
+})
+var target = $("#dummy");
+  $("#board").scroll(function() {
+    target.prop("scrollTop", this.scrollTop)
+          .prop("scrollLeft", this.scrollLeft);
+  });
+
+  {# $("#oneMoreWrongResponse").click(oneMoreWrongResponse(numberWrongResponse));
+    console.log(numberWrongResponse);
+  function oneMoreWrongResponse()
+  {
+     if ( numberWrongResponse == null) {
+         console.log("passage");
+         var numberWrongResponse = 0
+     }
+     console.log(numberWrongResponse);
+        $("#nbWrondResponse").html(numberWrongResponse);
+        
+  }; #}
+
+</script>
+{% endblock %}
